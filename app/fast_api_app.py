@@ -61,7 +61,7 @@ app: FastAPI = get_fast_api_app(
     agents_dir=AGENT_DIR,
     web=True,
     artifact_service_uri=artifact_service_uri,
-    allow_origins=allow_origins,
+    allow_origins=["*"],
     session_service_uri=session_service_uri,
     otel_to_cloud=HAS_GCP,
 )
@@ -74,8 +74,8 @@ import os
 
 @app.get("/")
 async def read_index():
-    # Le fichier index.html est à la racine du projet, qui est un niveau au-dessus de 'app'
-    index_path = os.path.join(os.path.dirname(AGENT_DIR), "index.html")
+    # Le fichier index.html est à la racine du projet (AGENT_DIR)
+    index_path = os.path.join(AGENT_DIR, "index.html")
     return FileResponse(index_path)
 
 @app.post("/feedback")
