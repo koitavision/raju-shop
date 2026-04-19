@@ -73,17 +73,42 @@ from fastapi.responses import FileResponse
 import os
 
 from pydantic import BaseModel
+from google.adk.runners import Runner
+from google.adk.sessions import InMemorySessionService
+from google.adk.agents.run_config import RunConfig, StreamingMode
+from google.genai import types
 
 class ChatRequest(BaseModel):
     message: str
 
+_session_service = InMemorySessionService()
+
 @app.post("/chat")
 async def chat_endpoint(request: ChatRequest):
     try:
-        # On utilise l'agent directement (on l'importe depuis agent.py)
         from app.agent import root_agent
-        response = await root_agent.run(request.message)
-        return {"text": response.text}
+        
+        user_id = "web_user"
+        session = _session_service.create_session_sync(user_id=user_id, app_name="raju_chat")
+        
+        runner = Runner(agent=root_agent, session_service=_session_service, app_name="raju_chat")
+        msg = types.Content(role="user", parts=[types.Part.from_text(text=request.message)])
+        
+        events = list(runner.run(
+            new_message=msg, 
+            user_id=user_id, 
+            session_id=session.id, 
+            run_config=RunConfig(streaming_mode=StreamingMode.NONE)
+        ))
+        
+        agent_text = ""
+        for event in events:
+            if event.content and event.content.parts:
+                for part in event.content.parts:
+                    if part.text:
+                        agent_text += part.text
+                        
+        return {"text": agent_text}
     except Exception as e:
         return {"text": f"Oups ! Raju a un petit souci : {str(e)}"}
 
