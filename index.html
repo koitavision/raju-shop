@@ -1,366 +1,212 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raju's Royal Artifacts</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Bazar de Raju - Artefacts Royaux</title>
     <style>
         :root {
-            --color-primary: #FF4500; /* Vibrant Orange */
-            --color-secondary: #FF1493; /* Deep Pink */
-            --color-accent: #FFD700; /* Gold */
-            --color-bg: #FFF0F5; /* Lavender Blush */
-            --color-surface: #FFFFFF;
-            --color-text: #2C0E1A; /* Dark Reddish Purple */
-            --color-text-light: #FFFAFA;
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --radius: 16px;
+            --primary: #FF9933; /* Orange Indien */
+            --secondary: #FF1493; /* Rose Profond */
+            --bg: #FFF5EE;
+            --text: #333;
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--color-bg);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 69, 0, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(255, 20, 147, 0.05) 0%, transparent 40%);
-            color: var(--color-text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
             margin: 0;
-            padding: 0;
             display: flex;
             flex-direction: column;
             height: 100vh;
-            overflow: hidden;
         }
 
         header {
-            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-            padding: 24px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
             text-align: center;
-            box-shadow: var(--shadow-md);
-            position: relative;
-            z-index: 10;
-            border-bottom: 4px solid var(--color-accent);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M20 0 L40 20 L20 40 L0 20 Z" fill="rgba(255,215,0,0.1)"/></svg>');
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        h1 {
+        header h1 {
             margin: 0;
-            font-size: 2.5rem;
-            color: var(--color-text-light);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 800;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            position: relative;
-            display: inline-block;
+            font-size: 1.8rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
-        .chat-container {
+        #chat-container {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            max-width: 800px;
-            margin: 0 auto;
-            width: 100%;
-            background: var(--color-surface);
-            box-shadow: var(--shadow-lg);
-            border-radius: var(--radius) var(--radius) 0 0;
-            overflow: hidden;
-            position: relative;
-            margin-top: 20px;
-        }
-
-        .messages {
-            flex: 1;
-            padding: 24px;
             overflow-y: auto;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            scroll-behavior: smooth;
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(10px);
+            gap: 15px;
         }
 
         .message {
             max-width: 80%;
-            padding: 16px 20px;
-            border-radius: var(--radius);
-            font-size: 1.1rem;
-            line-height: 1.5;
-            animation: fadeIn 0.3s ease-out;
-            box-shadow: var(--shadow-sm);
+            padding: 12px 16px;
+            border-radius: 15px;
+            line-height: 1.4;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .message.user {
+        .user-message {
             align-self: flex-end;
-            background: linear-gradient(135deg, var(--color-primary), #FF6347);
+            background-color: var(--primary);
             color: white;
-            border-bottom-right-radius: 4px;
+            border-bottom-right-radius: 2px;
         }
 
-        .message.agent {
+        .agent-message {
             align-self: flex-start;
-            background: var(--color-bg);
-            color: var(--color-text);
-            border-bottom-left-radius: 4px;
-            border: 1px solid rgba(255, 20, 147, 0.1);
-            border-left: 4px solid var(--color-secondary);
+            background-color: white;
+            color: var(--text);
+            border-bottom-left-radius: 2px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
         }
 
-        .input-area {
+        #input-area {
+            background: white;
             padding: 20px;
-            background: white;
-            border-top: 1px solid rgba(0,0,0,0.05);
             display: flex;
-            gap: 12px;
-            position: relative;
-            z-index: 10;
+            gap: 10px;
+            border-top: 2px solid var(--primary);
         }
 
-        input[type="text"] {
+        input {
             flex: 1;
-            padding: 16px 24px;
-            border: 2px solid #FFE4E1;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
             outline: none;
-            background: #FFF0F5;
         }
 
-        input[type="text"]:focus {
-            border-color: var(--color-secondary);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(255, 20, 147, 0.1);
+        input:focus {
+            border-color: var(--secondary);
         }
 
         button {
-            background: linear-gradient(135deg, var(--color-secondary), var(--color-primary));
+            background-color: var(--secondary);
             color: white;
             border: none;
-            border-radius: 30px;
-            padding: 0 32px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            padding: 10px 25px;
+            border-radius: 25px;
             cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
-            box-shadow: var(--shadow-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-weight: bold;
+            transition: transform 0.2s;
         }
 
         button:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: var(--shadow-lg);
-        }
-
-        button:active {
-            transform: translateY(1px) scale(0.98);
+            transform: scale(1.05);
         }
 
         button:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
+            background-color: #ccc;
         }
 
-        .loading {
-            align-self: flex-start;
-            background: var(--color-bg);
-            padding: 12px 20px;
-            border-radius: var(--radius);
-            border-bottom-left-radius: 4px;
-            display: none;
-            gap: 6px;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            background: var(--color-secondary);
-            border-radius: 50%;
-            animation: bounce 1.4s infinite ease-in-out both;
-        }
-
-        .dot:nth-child(1) { animation-delay: -0.32s; }
-        .dot:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
-        }
-
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 69, 0, 0.2);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 69, 0, 0.4);
+        .typing {
+            font-style: italic;
+            color: #888;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Raju's Royal Artifacts</h1>
-    </header>
+<header>
+    <h1>✨ Raju's Royal Artifacts ✨</h1>
+    <p>Le Bazar Numérique le plus brillant d'Internet</p>
+</header>
 
-    <div class="chat-container">
-        <div class="messages" id="messages">
-            <div class="message agent">
-                Namaste! Welcome to Raju's Royal Artifacts. How may I assist you today?
-            </div>
-        </div>
-        <div class="loading" id="loading">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-        </div>
-        <div class="input-area">
-            <input type="text" id="userInput" placeholder="Ask Raju something..." autocomplete="off">
-            <button id="sendBtn">Send</button>
-        </div>
-    </div>
+<div id="chat-container">
+    <div class="message agent-message">Namasté ! Bienvenue dans mon humble échoppe. Je suis Raju ! Que cherchez-vous aujourd'hui ? Une lampe ? Un palais ? Je vous fais un prix d'ami !</div>
+</div>
 
-    <script>
-        const API_BASE = 'https://raju-agent.onrender.com';
-        
-        // Generate random IDs
-        const generateId = () => Math.random().toString(36).substring(2, 15);
-        const userId = generateId();
-        const sessionId = generateId();
+<div id="input-area">
+    <input type="text" id="user-input" placeholder="Marchandez avec Raju..." autocomplete="off">
+    <button id="send-btn">Envoyer</button>
+</div>
 
-        const messagesContainer = document.getElementById('messages');
-        const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const loading = document.getElementById('loading');
+<script>
+    const BACKEND_URL = "https://raju-agent.onrender.com";
+    const USER_ID = "user-" + Math.random().toString(36).substr(2, 9);
+    const SESSION_ID = "session-" + Math.random().toString(36).substr(2, 9);
 
-        // Initialize session
-        async function initSession() {
-            try {
-                await fetch(`${API_BASE}/apps/app/users/${userId}/sessions/${sessionId}`, {
-                    method: 'POST'
-                });
-                console.log('Session initialized successfully');
-            } catch (error) {
-                console.error('Failed to initialize session:', error);
-            }
+    const chatContainer = document.getElementById('chat-container');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+
+    // Initialiser la session
+    async function initSession() {
+        try {
+            await fetch(`${BACKEND_URL}/apps/app/users/${USER_ID}/sessions/${SESSION_ID}`, {
+                method: 'POST'
+            });
+            console.log("Session initialisée:", SESSION_ID);
+        } catch (e) {
+            console.error("Erreur d'initialisation:", e);
         }
+    }
 
-        // Add message to UI
-        function addMessage(text, sender) {
-            const msgDiv = document.createElement('div');
-            msgDiv.classList.add('message', sender);
+    function appendMessage(text, isUser) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${isUser ? 'user-message' : 'agent-message'}`;
+        msgDiv.textContent = text;
+        chatContainer.appendChild(msgDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    async function sendMessage() {
+        const text = userInput.value.trim();
+        if (!text) return;
+
+        appendMessage(text, true);
+        userInput.value = '';
+        sendBtn.disabled = true;
+
+        const typingIndicator = document.createElement('div');
+        typingIndicator.className = 'typing';
+        typingIndicator.textContent = 'Raju réfléchit à une offre...';
+        chatContainer.appendChild(typingIndicator);
+
+        try {
+            const response = await fetch(`${BACKEND_URL}/run`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    appName: "app",
+                    userId: USER_ID,
+                    sessionId: SESSION_ID,
+                    newMessage: text
+                })
+            });
+
+            const data = await response.json();
+            chatContainer.removeChild(typingIndicator);
             
-            // Format newlines
-            msgDiv.innerHTML = text.replace(/\n/g, '<br>');
-            
-            messagesContainer.appendChild(msgDiv);
-            scrollToBottom();
+            // Extraire le texte de la réponse ADK
+            const agentText = data.text || "Désolé mon ami, j'ai un petit souci technique. Revenez plus tard !";
+            appendMessage(agentText, false);
+
+        } catch (e) {
+            chatContainer.removeChild(typingIndicator);
+            appendMessage("Oh là là ! La connexion avec le bazar est coupée. Vérifie ta clé API mon ami !", false);
+            console.error(e);
+        } finally {
+            sendBtn.disabled = false;
         }
+    }
 
-        function scrollToBottom() {
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
 
-        // Send message to agent
-        async function sendMessage() {
-            const text = userInput.value.trim();
-            if (!text) return;
+    // Lancement
+    initSession();
+</script>
 
-            // Disable input while sending
-            userInput.value = '';
-            userInput.disabled = true;
-            sendBtn.disabled = true;
-            
-            addMessage(text, 'user');
-            
-            loading.style.display = 'flex';
-            messagesContainer.appendChild(loading); // move loading to bottom
-            scrollToBottom();
-
-            try {
-                const response = await fetch(`${API_BASE}/run`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        appName: "app",
-                        userId: userId,
-                        sessionId: sessionId,
-                        newMessage: {
-                            role: "user",
-                            parts: [{ text: text }]
-                        }
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                
-                let agentReply = "Sorry, I couldn't understand that.";
-                if (data && data.content && data.content.parts && data.content.parts.length > 0) {
-                    agentReply = data.content.parts[0].text;
-                }
-
-                addMessage(agentReply, 'agent');
-                
-            } catch (error) {
-                console.error('Error communicating with agent:', error);
-                addMessage('Sorry, the connection to Raju\'s shop was lost. Please try again later.', 'agent');
-            } finally {
-                loading.style.display = 'none';
-                userInput.disabled = false;
-                sendBtn.disabled = false;
-                userInput.focus();
-            }
-        }
-
-        // Event Listeners
-        sendBtn.addEventListener('click', sendMessage);
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-
-        // Initialize on load
-        window.addEventListener('load', () => {
-            initSession();
-            userInput.focus();
-        });
-    </script>
 </body>
 </html>

@@ -69,6 +69,15 @@ app.title = "raju-shop"
 app.description = "API for interacting with the Agent raju-shop"
 
 
+from fastapi.responses import FileResponse
+import os
+
+@app.get("/")
+async def read_index():
+    # Le fichier index.html est à la racine du projet, qui est un niveau au-dessus de 'app'
+    index_path = os.path.join(os.path.dirname(AGENT_DIR), "index.html")
+    return FileResponse(index_path)
+
 @app.post("/feedback")
 def collect_feedback(feedback: Feedback) -> dict[str, str]:
     """Collect and log feedback.
