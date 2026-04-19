@@ -179,17 +179,22 @@
                     appName: "app",
                     userId: USER_ID,
                     sessionId: SESSION_ID,
-                    newMessage: { role: "user", parts: [{ text: text }] }
+                    newMessage: text
                 })
             });
 
             const data = await response.json();
             chatContainer.removeChild(typingIndicator);
             
-            // Extraire le texte de la réponse ADK
-            let agentText = "Désolé mon ami, j'ai un petit souci technique. Revenez plus tard !";
-            if (data && data.content && data.content.parts && data.content.parts.length > 0) {
+            // Extraction robuste du texte de l'agent
+            let agentText = "Namasté ! J'ai bien reçu ton message mais je n'arrive pas à formuler ma pensée. Réessaie !";
+            if (data.text) {
+                agentText = data.text;
+            } else if (data.content && data.content.parts && data.content.parts.length > 0) {
                 agentText = data.content.parts[0].text;
+            } else if (data.messages && data.messages.length > 0) {
+                const lastMsg = data.messages[data.messages.length - 1];
+                agentText = lastMsg.text || lastMsg.content || agentText;
             }
             appendMessage(agentText, false);
 
