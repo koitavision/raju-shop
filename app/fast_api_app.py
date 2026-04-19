@@ -72,6 +72,21 @@ app.description = "API for interacting with the Agent raju-shop"
 from fastapi.responses import FileResponse
 import os
 
+from pydantic import BaseModel
+
+class ChatRequest(BaseModel):
+    message: str
+
+@app.post("/chat")
+async def chat_endpoint(request: ChatRequest):
+    try:
+        # On utilise l'agent directement (on l'importe depuis agent.py)
+        from app.agent import root_agent
+        response = await root_agent.run(request.message)
+        return {"text": response.text}
+    except Exception as e:
+        return {"text": f"Oups ! Raju a un petit souci : {str(e)}"}
+
 @app.get("/")
 async def read_index():
     # En Docker, le fichier est dans /code/index.html

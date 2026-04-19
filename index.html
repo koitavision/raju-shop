@@ -172,55 +172,19 @@
         chatContainer.appendChild(typingIndicator);
 
         try {
-            const response = await fetch(`${BACKEND_URL}/run`, {
+            const response = await fetch(`${BACKEND_URL}/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    appName: "app",
-                    userId: USER_ID,
-                    sessionId: SESSION_ID,
-                    newMessage: text
+                    message: text
                 })
             });
 
             const data = await response.json();
             chatContainer.removeChild(typingIndicator);
             
-            // Extraction ULTRA-ROBUSTE du texte de l'agent
-            let agentText = "";
-            
-            // 1. Essayer les formats standards ADK/Gemini
-            if (data.text) {
-                agentText = data.text;
-            } else if (data.content && data.content.parts && data.content.parts[0]) {
-                agentText = data.content.parts[0].text;
-            } else if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-                agentText = data.candidates[0].content.parts[0].text;
-            } else if (data.messages && data.messages.length > 0) {
-                const lastMsg = data.messages[data.messages.length - 1];
-                agentText = lastMsg.text || lastMsg.content || "";
-            }
-
-            // 2. Si rien n'est trouvé, chercher n'importe quel champ "text" récursivement
-            if (!agentText) {
-                const search = (obj) => {
-                    if (!obj || typeof obj !== 'object') return null;
-                    if (obj.text && typeof obj.text === 'string') return obj.text;
-                    for (let key in obj) {
-                        const res = search(obj[key]);
-                        if (res) return res;
-                    }
-                    return null;
-                };
-                agentText = search(data);
-            }
-
-            // 3. Fallback final
-            if (!agentText) {
-                agentText = "Namasté ! J'ai bien reçu ton message mais je n'arrive pas à formuler ma pensée. Réessaie !";
-                console.log("Données reçues (pour debug):", data);
-            }
-            
+            // On utilise le champ "text" tout simple que nous venons de créer
+            const agentText = data.text || "Namasté ! J'ai bien reçu ton message mais je n'arrive pas à formuler ma pensée. Réessaie !";
             appendMessage(agentText, false);
 
         } catch (e) {
