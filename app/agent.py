@@ -20,7 +20,7 @@ from google.genai import types
 
 import os
 
-os.environ["GOOGLE_API_KEY"] = "AIzaSyCccHIwHt5FGfOP_EX10VJFSkXZzL6bj4U"
+os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY", "")
 os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "False"
 
 
