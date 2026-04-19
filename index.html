@@ -179,7 +179,7 @@
                     appName: "app",
                     userId: USER_ID,
                     sessionId: SESSION_ID,
-                    newMessage: text
+                    newMessage: { role: "user", parts: [{ text: text }] }
                 })
             });
 
@@ -187,7 +187,10 @@
             chatContainer.removeChild(typingIndicator);
             
             // Extraire le texte de la réponse ADK
-            const agentText = data.text || "Désolé mon ami, j'ai un petit souci technique. Revenez plus tard !";
+            let agentText = "Désolé mon ami, j'ai un petit souci technique. Revenez plus tard !";
+            if (data && data.content && data.content.parts && data.content.parts.length > 0) {
+                agentText = data.content.parts[0].text;
+            }
             appendMessage(agentText, false);
 
         } catch (e) {

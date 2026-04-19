@@ -74,8 +74,11 @@ import os
 
 @app.get("/")
 async def read_index():
-    # Le fichier index.html est à la racine du projet (AGENT_DIR)
-    index_path = os.path.join(AGENT_DIR, "index.html")
+    # En Docker, le fichier est dans /code/index.html
+    index_path = "/code/index.html"
+    if not os.path.exists(index_path):
+        # Fallback pour le local
+        index_path = os.path.join(AGENT_DIR, "index.html")
     return FileResponse(index_path)
 
 @app.post("/feedback")
